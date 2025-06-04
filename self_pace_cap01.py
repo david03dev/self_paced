@@ -7,7 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from time import sleep
+import openpyxl
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
@@ -17,18 +17,27 @@ wait = WebDriverWait(driver,10)
 
 
 def test_case_01():
+
+    wb = openpyxl.load_workbook("report.xlsx")
+    sheet = wb["Report"]
+    data = []
+
     driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
 
-    wait.until(EC.presence_of_element_located((By.NAME,"username"))).send_keys("admin")
+    username = "admin"
+    sheet.cell(2,2) = username
+    
+    wait.until(EC.presence_of_element_located((By.NAME,"username"))).send_keys(username)
 
     password = "admin123"
+    sheet.cell(2,3) = password
     wait.until(EC.presence_of_element_located((By.NAME,"password"))).send_keys(password)
 
     login_btn = wait.until(EC.element_to_be_clickable((By.XPATH,"//button[@type='submit']")))
     login_btn.click()
 
     confirmation_status = wait.until(EC.visibility_of_element_located((By.XPATH,
-                                    "//span[@class='oxd-topbar-header-breadcrumb']//h6[text()='Dashboard']"))).text
+                                                "//span[@class='oxd-topbar-header-breadcrumb']//h6[text()='Dashboard']"))).text
 
     assert "Dashboard" in confirmation_status, "TC_01 Failed"
     if "Dashboard" in confirmation_status:
