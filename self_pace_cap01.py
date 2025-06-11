@@ -25,12 +25,14 @@ def test_case_01():
     driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
 
     username = "admin"
-    sheet.cell(2,2) = username
+    sheet.cell(2,2).value = username
     
     wait.until(EC.presence_of_element_located((By.NAME,"username"))).send_keys(username)
 
     password = "admin123"
-    sheet.cell(2,3) = password
+    sheet.cell(2,3).value = password
+    wb.save
+    wb.close
     wait.until(EC.presence_of_element_located((By.NAME,"password"))).send_keys(password)
 
     login_btn = wait.until(EC.element_to_be_clickable((By.XPATH,"//button[@type='submit']")))
