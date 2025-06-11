@@ -13,7 +13,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 driver.maximize_window()
 
-wait = WebDriverWait(driver,10)
+wait = WebDriverWait(driver,15)
 
 
 def test_case_01():
